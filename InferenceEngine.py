@@ -5,8 +5,9 @@ class InferenceEngine():
     def __init__(self):
         pass
 
-    def echo(self):
-        print("This is InferenceEngine!")
+    # Backward Chaining using Depth-First Search
+    def backwardChaining(self):
+        pass
 
     # Match a goal with a consequent
     def matchGoal(self, goal):
