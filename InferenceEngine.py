@@ -3,6 +3,7 @@
 from BackwardChaining.WorkingMemory import WorkingMemory
 from BackwardChaining.KnowledgeBase import KnowledgeBase
 # from BackwardChaining.DepthFirstSearch import DepthFirstSearch
+import sys
 
 
 class InferenceEngine(object):
@@ -11,24 +12,29 @@ class InferenceEngine(object):
     def __init__(self):
         pass
 
-    def depth_first_search(self, graph, start, goal):
+    @staticmethod
+    def depth_first_search(graph, start, goal):
         """ Performs Depth First Search, returns success for failure """
-        # taken from http://eddmann.com/posts/depth-first-search-and-breadth-first-search-in-python/
 
-        stack = [(start, [start])]
+        # Adapted from http://eddmann.com/posts/depth-first-search-and-breadth-first-search-in-python/
 
-        print("Start stack: ", stack)
+        #  Initialise frontier with the (consequent, antecedent) tuple structure
+        frontier = [(start, [start])]
 
-        while stack:
-            (vertex, path) = stack.pop()
+        print("Frontier: ", frontier)
 
-            for i in graph[vertex] - set(path):
+        # Run if frontier is not empty
+        while frontier:
+            (consequent, antecedent) = frontier.pop()
+
+            for i in graph[consequent] - set(antecedent):
+
                 if i == goal:
-                    yield path + [i]  # returns a generator
-                    print(path + [i])
-                    print("Goal found:", goal)
+                    yield antecedent + [i]  # returns a generator
+                    print(antecedent + [i])
+                    print("SUCCESS - Goal found:", goal)
                 else:
-                    stack.append((i, path + [i]))
+                    frontier.append((i, antecedent + [i]))
 
     def match_goal(self, goal):
         """ Match a goal with a consequent, using Depth-First Search """
@@ -45,7 +51,7 @@ class InferenceEngine(object):
         pass
 
     def match_subgoal(self, subgoal):
-        """ Match a subgoal with antecedents from a rule, using Depth-First Search """
+        """ Match a sub-goal with antecedents from a rule, using Depth-First Search """
         pass
 
     def select(self):

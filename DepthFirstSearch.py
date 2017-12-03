@@ -11,9 +11,9 @@ class DepthFirstSearch(object):
     def __init__(self):
         pass
 
-    def execute(self, initial_state, goal):
+    def execute(self, start, goal):
 
-        self.frontier = [initial_state]
+        self.frontier = [start]
 
         # Make sure frontier is not empty, otherwise fail the program
         if not self.frontier:
