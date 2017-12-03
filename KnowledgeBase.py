@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-#
 
-from Rule import Rule
+from BackwardChaining.Rule import Rule
+
 
 class KnowledgeBase(object):
-    ''' Responsible for managing the knowledge base. The rule base. '''
+    """" Responsible for managing the knowledge base. The rule base. """
 
     rules = []
 

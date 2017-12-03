@@ -1,48 +1,55 @@
 # -*- coding: utf-8 -*-#
 
+from BackwardChaining.WorkingMemory import WorkingMemory
+from BackwardChaining.KnowledgeBase import KnowledgeBase
+# from BackwardChaining.DepthFirstSearch import DepthFirstSearch
 
-class InferenceEngine():
-    """ This represents the application's Inference Engine """
 
-    # Initialise frontier and explored set
-    frontier = [] # empty stack
-    explored = {} # empty set
+class InferenceEngine(object):
+    """ Represents the application's Inference Engine: Match -> Select -> Act using Backward Chaining """
 
     def __init__(self):
         pass
 
-    def depth_first_search(self, initial_state, goal):
-        """ Performs Depth-First search strategy, returns success or failure """
+    def depth_first_search(self, graph, start, goal):
+        """ Performs Depth First Search, returns success for failure """
+        # taken from http://eddmann.com/posts/depth-first-search-and-breadth-first-search-in-python/
 
-        self.frontier = [initial_state]
+        stack = [(start, [start])]
 
-        # Make sure frontier is not empty, otherwise fail the program
-        while not self.frontier:
-            state = self.frontier.pop() # Remove last element of the Stack
-            explored.append(self.state)
+        print("Start stack: ", stack)
 
-            # Goal test: returns success if goal is found.
-            if(state == goal):
-                print("Success")
-                return
+        while stack:
+            (vertex, path) = stack.pop()
 
-            for neighbor in state.neighbors():
-                if not neighbor in:
-                    frontier.append(state)
-        return
+            for i in graph[vertex] - set(path):
+                if i == goal:
+                    yield path + [i]  # returns a generator
+                    print(path + [i])
+                    print("Goal found:", goal)
+                else:
+                    stack.append((i, path + [i]))
 
     def match_goal(self, goal):
-        """ Match a goal with a consequent, using Backward Chaining operating with Depth-First Search"""
+        """ Match a goal with a consequent, using Depth-First Search """
+
+        # workingMemory = WorkingMemory()
+        # knowledgeBase = KnowledgeBase()
+        #
+        # rules = knowledgeBase.get_rules()
+        #
+        #     # for each rule whose consequent matches this hypothesis
+        # for i in range(0, len(rules)):
+        #     if rules[i].get_consequent() == goal:
+        #         print("dsfsfsf", rules[i].get_antecendents)
         pass
 
-    # Match a subgoal with antecedents from a rule
     def match_subgoal(self, subgoal):
+        """ Match a subgoal with antecedents from a rule, using Depth-First Search """
         pass
 
-    # Select function
     def select(self):
         pass
 
-    # Act function
     def act(self):
         pass
