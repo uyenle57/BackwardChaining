@@ -2,7 +2,7 @@
 
 from BackwardChaining.KnowledgeBase import KnowledgeBase
 from BackwardChaining.WorkingMemory import WorkingMemory
-
+import sys
 
 class InferenceEngine(object):
     """ Represents the application's Inference Engine: Match -> Select -> Act using Backward Chaining """
@@ -19,7 +19,6 @@ class InferenceEngine(object):
 
     antecedents = []
     consequences = []
-    goals = []
 
     graph = {}
 
@@ -37,7 +36,7 @@ class InferenceEngine(object):
 
         # print("Antecedents:", str(self.antecedents))
 
-        # Initialise temp Knowledge Base
+        # temporary knowledge base
         self.graph = {
             ('b', 'g'): set([('f', 'h'), ('a', 'c')]),
             ('f', 'h'): set(),
@@ -74,44 +73,48 @@ class InferenceEngine(object):
                 else:
                     frontier.append((i, antecedent + [i]))
 
-    def backward_chaining(self, goal):
+    def start(self, goal):
         """ Performs Backward Chaining by recursively matching the consequences with each hypothesis in the working memory. """
 
         # Make sure goal exists
         if goal:
-            new_goals = self.match_goal(goal) # Start by matching with the given goal
-
-            for goal in new_goals:
-                if goal in set(self.work_mem_facts):
-                    print(goal, "---> available in Working Memory.\n")
-                    self.current_working_memory.append(goal)
-                    print("Current Working Memory: ", self.current_working_memory)
-                else:
-                    self.match_sub_goal(goal)
+            self.match_goal(goal) # Start by matching with the given goal
+        else:
+            print("ERROR: Goal not found.")
+            sys.exit(1)
 
     def match_goal(self, goal):
         """ Match a goal/hypothesis with a consequent, using Depth-First Search. Returns matched sub-goal."""
+
         print("\n------------------------")
         print("Hypothesis:", goal)
         print("------------------------")
 
         # TO DO use DFS
 
-        for consequent in self.consequences:
-            if consequent == goal:
-                sub_goal = self.graph[consequent]
-        print("Sub-goals:", sub_goal)
-        return sub_goal
+        # Select the matching rule
+        selected_rules = self.select(goal)
+        print("Select rule:", selected_rules)
+
+        for sub_goal in selected_rules:
+            if sub_goal in set(self.work_mem_facts):
+                print(sub_goal, "---> available in Working Memory.\n")
+                self.current_working_memory.append(sub_goal)
+                print("Current Working Memory: ", self.current_working_memory)
+            else:
+                self.match_sub_goal(sub_goal)
 
     def match_sub_goal(self, sub_goal):
         """ Match a sub-goal with antecedents from a rule, using Depth-First Search """
+        self.match_goal(sub_goal)
 
-        # TO DO use DFS
+    def select(self, goal):
+        """ Select the matching antecedents. """
 
-        return self.match_goal(sub_goal)
-
-    def select(self):
-        pass
+        for consequent in self.consequences:
+            if consequent == goal:
+                antecedent = self.graph[consequent]
+        return antecedent
 
     def act(self):
         pass
