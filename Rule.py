@@ -14,7 +14,7 @@ class Rule(object):
     def get_antecedents(self):
         return self.antecedents
 
-    def get_consequent(self):
+    def get_consequences(self):
         return self.consequences
 
     def to_string(self):

@@ -1,11 +1,54 @@
 # -*- coding: utf-8 -*-#
 
+from BackwardChaining.KnowledgeBase import KnowledgeBase
+from BackwardChaining.WorkingMemory import WorkingMemory
+
 
 class InferenceEngine(object):
     """ Represents the application's Inference Engine: Match -> Select -> Act using Backward Chaining """
 
+    # Knowledge Base
+    knowledge_base = KnowledgeBase()
+    kBase = knowledge_base.get_rules()
+
+    # Facts from the Working Memory
+    working_memory = WorkingMemory()
+    work_mem_facts = working_memory.get_facts()
+
+    current_working_memory = []
+
+    antecedents = []
+    consequences = []
+    goals = []
+
+    graph = {}
+
     def __init__(self):
-        pass
+
+        # Get consequences
+        for i in range(0, (len(self.kBase)-6)):
+            self.consequences.append(self.kBase[i].get_consequences())
+
+        # print("Consequences:", str(self.consequences))
+
+        # Get antecedents
+        for i in range(0, (len(self.kBase)-6)):
+            self.antecedents.append(self.kBase[i].get_antecedents())
+
+        # print("Antecedents:", str(self.antecedents))
+
+        # Initialise temp Knowledge Base
+        self.graph = {
+            ('b', 'g'): set([('f', 'h'), ('a', 'c')]),
+            ('f', 'h'): set(),
+            ('a', 'c'): set([('d', 'j'), ('e', 'm'), ('k', 'i')]),
+            ('d', 'j'): set(),
+            ('k', 'i'): set([('u', 'v')]),
+            ('u', 'v'): set(),
+            ('e', 'm'): set([('n', 's')]),
+            ('n', 's'): set([('p', 'q')]),
+            ('p', 'q'): set([('r', 't')])
+        }
 
     def depth_first_search(self, graph, start, goal):
         """ Performs Depth First Search, returns success for failure """
@@ -31,36 +74,41 @@ class InferenceEngine(object):
                 else:
                     frontier.append((i, antecedent + [i]))
 
-    def match_goal(self, graph, working_memory, goal):
-        """ Match a goal with a consequent, using Depth-First Search """
+    def backward_chaining(self, goal):
+        """ Performs Backward Chaining by recursively matching the consequences with each hypothesis in the working memory. """
 
-        consequences = graph.keys()
+        # Make sure goal exists
+        if goal:
+            new_goals = self.match_goal(goal) # Start by matching with the given goal
 
-        # for c in consequences:
-        #     antecedents = graph[c]
-        #     print(c, ":", antecedents)
+            for goal in new_goals:
+                if goal in set(self.work_mem_facts):
+                    print(goal, "---> available in Working Memory.\n")
+                    self.current_working_memory.append(goal)
+                    print("Current Working Memory: ", self.current_working_memory)
+                else:
+                    self.match_sub_goal(goal)
 
-        # Backward Chaining Algorithm - currently not recursive
-        for hypothesis in working_memory:
-            for consequent in consequences:
-                if consequent == hypothesis:
+    def match_goal(self, goal):
+        """ Match a goal/hypothesis with a consequent, using Depth-First Search. Returns matched sub-goal."""
+        print("\n------------------------")
+        print("Hypothesis:", goal)
+        print("------------------------")
 
-                    antecedents = graph[consequent]
+        # TO DO use DFS
 
-                    # match each antecedents with the facts from working memory using DFS
+        for consequent in self.consequences:
+            if consequent == goal:
+                sub_goal = self.graph[consequent]
+        print("Sub-goals:", sub_goal)
+        return sub_goal
 
-                    # if all antecedents matched, then success
-                    if antecedents == hypothesis:
-                        self.depth_first_search(antecedents, hypothesis)
-                    else:
-                        # if not matched, add as new subgoal
-                        self.match_subgoal(antecedents)
-
-                    pass
-
-    def match_subgoal(self, subgoal):
+    def match_sub_goal(self, sub_goal):
         """ Match a sub-goal with antecedents from a rule, using Depth-First Search """
-        pass
+
+        # TO DO use DFS
+
+        return self.match_goal(sub_goal)
 
     def select(self):
         pass
