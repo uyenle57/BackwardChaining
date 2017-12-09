@@ -6,14 +6,18 @@ class WorkingMemory(object):
 
     facts = []
 
-    def __init__(self):
+    def __init__(self, facts):
         """ Initialise initial Working Memory as a list of Facts """
-
-        self.facts = [('f', 'h'), ('d', 'j'), ('u', 'v'), ('r', 't')]
+        self.facts = facts
 
     def has_fact(self, fact):
         """ Return True in the working memory has the fact else False."""
         return fact in self.facts
 
-    def get_facts(self) -> object:
+    def add_fact(self, fact):
+        """ Add a fact to the Working Memory. """
+        self.facts.append(fact)
+
+    def get_facts(self):
+        """ Returns the facts of the Working Memory. """
         return self.facts
