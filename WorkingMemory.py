@@ -2,7 +2,7 @@
 
 
 class WorkingMemory(object):
-    """ This represents the application's working memory """
+    """ Represents the application's Working Memory. Contains a set of Facts. """
 
     facts = []
 
@@ -11,7 +11,7 @@ class WorkingMemory(object):
         self.facts = facts
 
     def has_fact(self, fact):
-        """ Return True in the working memory has the fact else False."""
+        """ Check if the given fact is available in the Working Memory. Returns True or False. """
         return fact in self.facts
 
     def add_fact(self, fact):
@@ -19,5 +19,5 @@ class WorkingMemory(object):
         self.facts.append(fact)
 
     def get_facts(self):
-        """ Returns the facts of the Working Memory. """
+        """ Returns all the facts in the Working Memory. """
         return self.facts
