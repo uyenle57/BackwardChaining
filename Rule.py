@@ -2,13 +2,15 @@
 
 
 class Rule(object):
-    """ Defines the antecedents and consequences of each rule in the Knowledge Base """
+    """ Defines the antecedents and consequences of each rule in the Knowledge Base. """
 
     rule_number = ""
     antecedents = []
     consequences = ()
 
     def __init__(self, rule_number, antecedents, consequences):
+        """ Initialise parameters. """
+
         self.rule_number = rule_number
         self.antecedents = antecedents
         self.consequences = consequences
@@ -34,5 +36,5 @@ class Rule(object):
         return self.rule_number
 
     def to_string(self):
-        """ Returns the rule as a string in the IF (antecedent) THEN (consequent) structure. """
+        """ Returns the rule as a string in the IF (antecedent) THEN (consequent) format. """
         return "IF " + str(self.antecedents) + " \n\tTHEN " + str(self.consequences)
